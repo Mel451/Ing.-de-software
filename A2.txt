@@ -1,2 +1,6 @@
 creado A2.txt desde rama uno
+
+Se modifico desde rama 1
+
 Modificado desde rama 2
+
