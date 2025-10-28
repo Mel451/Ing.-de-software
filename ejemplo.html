@@ -1,0 +1,49 @@
+<ol id="lista"></ol>
+<p id="estado"></p>
+
+<script>
+  const MAX_ENTRADAS = 10;
+  let entradas = [];
+
+  const lista = document.getElementById('lista');
+  const estado = document.getElementById('estado');
+
+  /*function maskCard(value) {
+    const num = String(value).replace(/\s+/g, '');
+    return '**** **** **** ' + num.slice(-4);
+  } No tan nesesario*/
+
+  function render() {
+    lista.innerHTML = ''; // ✅ limpia la lista antes de renderizar
+    entradas.forEach((val, i) => {
+      const li = document.createElement('li');
+      li.textContent = `${i+1}. ${maskCard(val)} — ${new Date().toLocaleTimeString()}`;
+      lista.appendChild(li);
+    });
+  }
+
+  function limpiarLista() {
+    entradas = [];         // vaciar array de entradas
+    render();              // limpiar visualmente
+    estado.textContent = 'Interfaz reiniciada.';
+  }
+
+  // simulando llegada de datos por socket
+  function recibirDato(dato) {
+    entradas.push(dato);
+    render();
+    estado.textContent = `Recibido ${entradas.length}/${MAX_ENTRADAS}`;
+
+    if (entradas.length >= MAX_ENTRADAS) {
+      estado.textContent = 'Se alcanzaron 10 registros. Limpiando interfaz...';
+      setTimeout(limpiarLista, 1000); // 🔄 limpiar automáticamente
+    }
+  }
+
+  // prueba: simula llegada de tarjetas cada 1 segundo
+  let contador = 0;
+  setInterval(() => {
+    contador++;
+    recibirDato('123456789012' + String(contador).padStart(2, '0'));
+  }, 1000);
+</script>
